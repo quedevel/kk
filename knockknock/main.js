@@ -1,89 +1,55 @@
 $(document).ready(function () {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
-    getClientToken()
-
-    $.ajax({
-        url: "http://localhost:8080/kk/list",
-        type: "get",
-        dataType: "json",
-        contentType: "application/json"
-    }).done(function (list) {
-        Array.from(list).forEach(item=>
-            // console.log(item)
-            item.no%2 == 0 ? appendRightContent(item) : appendLeftContent(item)
-        )
-
-
-    })
-
+    registerClientToken()
+    $.getJSON("http://localhost:8080/kk/list", "", list => Array.from(list).forEach(item => item.no % 2 == 0 ? appendRightContent(item) : appendLeftContent(item)))
+    textFit(document.getElementsByClassName('productTitle'), {multiLine: true})
 })
-// var source = $("#product").html();
-// var tmp = Handlebars.compile(source);
-//
-// function appendLeftContent(data) {
-//     $(".leftContent").append(tmp(data));
-// }
-//
-// function appendRightContent(data) {
-//     $(".rightContent").append(tmp(data));
-// }
 
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function content(data) {
+    let fee = data.fee === 0 ? '무료' : data.fee
+    let tag = "<div class='container'>\n" +
+        "            <div style='display: flex'>" +
+        "                <img class='productImg' src='" + data.image + "'>" +
+        "                <div style='width: 100px'>" +
+        "                    <a target='_blank' href='" + data.link + "'><span class='productTitle'>" + data.title + "</span></a>" +
+        "                    <span class='productPrice'>" + comma(data.price) + "/" + fee + "</span>" +
+        "                </div>" +
+        "            </div>" +
+        "        </div>"
+    return tag
+}
 
 function appendLeftContent(data) {
-    let tag = "<div class=\"container\">\n" +
-    "            <div style=\"display: flex\">\n" +
-    "                <img class=\"productImg\" src=\""+data.image+"\">\n" +
-    "                <div style='width: 100px'>\n" +
-    "                    <span class=\"productTitle\">"+data.title+"</span>\n" +
-    "                    <span class=\"productPrice\">"+data.price+"</span>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </div>"
-    $(".leftContent").append(tag)
+    $(".leftContent").append(content(data))
 }
 
 function appendRightContent(data) {
-    let tag = "<div class=\"container\">\n" +
-        "            <div style=\"display: flex\">\n" +
-        "                <img class=\"productImg\" src=\""+data.image+"\">\n" +
-        "                <div style='width: 100px'>\n" +
-        "                    <span class=\"productTitle\">"+data.title+"</span>\n" +
-        "                    <span class=\"productPrice\">"+data.price+"</span>\n" +
-        "                </div>\n" +
-        "            </div>\n" +
-        "        </div>"
-    $(".rightContent").append(tag)
+    $(".rightContent").append(content(data))
 }
 
-function getClientToken() {
-    var result = null
-    // Initialize Firebase
-    var config = {
+function registerClientToken() {
+    let config = {
         apiKey: "AIzaSyB5h1dtyUXyYroO4ZengUlSKCa93-WoRnU",
         authDomain: "jarvis-77f82.firebaseapp.com",
         databaseURL: "https://jarvis-77f82.firebaseio.com",
         projectId: "jarvis-77f82",
         storageBucket: "jarvis-77f82.appspot.com",
         messagingSenderId: "172501072688",
-        appId: "1:172501072688:web:e1d67ee6f83f43711ba6f5",
-        measurementId: "G-GRFQ9P114V"
+        appId: "1:172501072688:web:17b57e04673ab8351ba6f5",
+        measurementId: "G-WJ48JZCEDP"
     }
 
     firebase.initializeApp(config)
+
     const messaging = firebase.messaging()
 
     messaging.requestPermission()
-        .then(function () {
-            console.log("Have permission")
-            return messaging.getToken()
-        })
-        .then(function (token) {
-            console.log(token)
-            result = token
-        })
-        .catch(function (arr) {
-            console.log("Error Occured" + arr)
-        })
-
-    return result
+        .then(() => messaging.getToken())
+        .then(token => $.post("http://localhost:8080/kk/token", token, msg => console.log(msg)))
+        .catch(err => console.log("Error Occured" + err))
 }

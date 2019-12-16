@@ -1,0 +1,133 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: #22374C;
+}
+
+body {
+    width: 500px;
+    min-height: 800px;
+    display: table;
+
+    background: #ccc;
+    background: url('https://res.cloudinary.com/dc4stsmlc/image/upload/v1570612773/Codepen/background_ehdzyc.jpg');
+    background-size: cover;
+    font-family: 'Noto Sans', sans-serif;
+    overflow: hidden;
+}
+
+a {
+   text-decoration: none;
+}
+
+a:hover {
+}
+
+.content {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.productPrice {
+    font-size: 1em;
+    display: block;
+}
+
+.productTitle {
+    font-size: 1em;
+    display: block;
+}
+
+.productPrice {
+    animation: productPrice 1s ease infinite;
+    -moz-animation: productPrice 1s ease infinite;
+    -webkit-animation: productPrice 1s ease infinite;
+}
+
+@keyframes productPrice {
+    0%,
+    100% {
+        text-shadow: 0 0 1vw #FA1C16, 0 0 3vw #FA1C16, 0 0 10vw #FA1C16, 0 0 10vw #FA1C16, 0 0 .4vw #FED128, .5vw .5vw .1vw #806914;
+        color: #FED128;
+    }
+}
+
+.productTitle {
+    animation: productTitle 2s linear infinite;
+    -moz-animation: productTitle 2s linear infinite;
+    -webkit-animation: productTitle 2s linear infinite;
+    -o-animation: productTitle 2s linear infinite;
+}
+
+@keyframes productTitle {
+    0%,
+    100% {
+        text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
+        color: #28D7FE;
+    }
+}
+
+
+.title {
+    font-size: 70px;
+    display: block;
+}
+
+.title {
+    animation: title 2s linear infinite;
+    -moz-animation: title 2s linear infinite;
+    -webkit-animation: title 2s linear infinite;
+    -o-animation: title 2s linear infinite;
+}
+
+@keyframes title {
+    0%,
+    100% {
+        text-shadow: 0 0 1vw hotpink, 0 0 3vw hotpink, 0 0 10vw hotpink, 0 0 10vw hotpink, 0 0 .4vw hotpink, .5vw .5vw .1vw hotpink;
+        color: pink;
+    }
+    50% {
+        text-shadow: 0 0 .5vw deeppink, 0 0 1.5vw deeppink, 0 0 5vw deeppink, 0 0 5vw deeppink, 0 0 .2vw deeppink, .5vw .5vw .1vw deeppink;
+        color: lightpink;
+    }
+}
+
+.date {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.date {
+    animation: date 2s linear infinite;
+    -moz-animation: date 2s linear infinite;
+    -webkit-animation: date 2s linear infinite;
+    -o-animation: date 2s linear infinite;
+}
+
+@keyframes date {
+    0%,
+    100% {
+        text-shadow: 0 0 1vw yellow, 0 0 3vw yellow, 0 0 10vw yellow, 0 0 10vw yellow, 0 0 .4vw yellow, .5vw .5vw .1vw yellow;
+        color: lightgoldenrodyellow;
+    }
+    50% {
+        text-shadow: 0 0 .5vw yellowgreen, 0 0 1.5vw yellowgreen, 0 0 5vw yellowgreen, 0 0 5vw yellowgreen, 0 0 .2vw yellowgreen, .5vw .5vw .1vw yellowgreen;
+        color: greenyellow;
+    }
+}
+
+.text {
+    vertical-align: middle;
+}
+
+.productImg {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+}

@@ -1,5 +1,7 @@
 package org.jarvis.kk.domain;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,11 +23,13 @@ public class CommunityCrawling {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer no;
     
-    private Integer price;
+    private Integer price, fee;
     private String category, title;
     
     @Column(length = 1000)
     private String image, link;
 
     private boolean lastCrawling;
+
+    private LocalDateTime regDate;
 }

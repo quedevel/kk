@@ -18,7 +18,7 @@ public class FCMConfig {
     @Bean
     public void setFirebase(){
         try{
-            FileInputStream serviceAccount = new FileInputStream("C:/Users/SH/FireBaseDB/jarvis-77f82-firebase-adminsdk-2l6dx-9676d850ae.json");
+            FileInputStream serviceAccount = new FileInputStream("C:/Users/SH/FireBaseDB/serviceAccountKey.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .setDatabaseUrl("https://jarvis-77f82.firebaseio.com").build();
