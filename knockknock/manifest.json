@@ -1,8 +1,10 @@
 {
     "name": "Knock Knock",
-    "description" : "Wake me up when it came to the price I wanted",
+    "description" : "We’ll wake your desire up",
     "version": "1.0",
     "manifest_version": 2,
+"description": "진짜 믿을 수 있는, 당신이 원하는 최저가!",
+"icons":{ "128" :"icon.png" }, 
   "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
 "background": {
        "page": "background.html",
