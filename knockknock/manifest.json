@@ -5,7 +5,7 @@
     "manifest_version": 2,
 "description": "진짜 믿을 수 있는, 당신이 원하는 최저가!",
 "icons":{ "128" :"icon.png" }, 
-  "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+  "content_security_policy":"script-src 'self' https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.0.js https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
 "background": {
        "page": "background.html",
     "persistent": false
@@ -14,7 +14,7 @@
     "identity"
   ],
   "oauth2": {
-    "client_id": "172501072688-6q7ago0lhf99ldlgk0msal836mgnd2tg.apps.googleusercontent.com",
+    "client_id": "",
     "scopes": [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile"

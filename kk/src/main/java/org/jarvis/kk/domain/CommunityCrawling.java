@@ -1,35 +1,31 @@
 package org.jarvis.kk.domain;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Data;
+import org.jarvis.kk.dto.BaseTimeEntity;
+import org.jarvis.kk.dto.Product;
+
+import lombok.Getter;
 
 /**
  * CommunityCrawling
  */
-@Data
+@Getter
 @Entity
-@Table(name = "tbl_CommunityCrawling")
-public class CommunityCrawling {
+@Table(name="tbl_CommunityCrawling")
+public class CommunityCrawling extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer no;
-    
-    private Integer price, fee;
-    private String category, title;
-    
-    @Column(length = 1000)
-    private String image, link;
+
+    @Embedded
+    private Product product;
 
     private boolean lastCrawling;
-
-    private LocalDateTime regDate;
 }

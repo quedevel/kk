@@ -21,7 +21,7 @@ public class FCMConfig {
             FileInputStream serviceAccount = new FileInputStream("C:/Users/SH/FireBaseDB/serviceAccountKey.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://jarvis-77f82.firebaseio.com").build();
+                    .setDatabaseUrl("").build();
             FirebaseApp.initializeApp(options, "options");
         } catch(Exception e){
             e.printStackTrace();

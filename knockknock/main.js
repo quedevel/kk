@@ -1,6 +1,8 @@
 $(document).ready(function () {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
     registerClientToken()
+    naverLogin()
+    $('#googleLogin').on('click',googleLogin)
     $.getJSON("http://localhost:8080/kk/list", "", list => Array.from(list).forEach(item => item.no % 2 == 0 ? appendRightContent(item) : appendLeftContent(item)))
     textFit(document.getElementsByClassName('productTitle'), {multiLine: true})
 })
@@ -34,14 +36,7 @@ function appendRightContent(data) {
 
 function registerClientToken() {
     let config = {
-        apiKey: "AIzaSyB5h1dtyUXyYroO4ZengUlSKCa93-WoRnU",
-        authDomain: "jarvis-77f82.firebaseapp.com",
-        databaseURL: "https://jarvis-77f82.firebaseio.com",
-        projectId: "jarvis-77f82",
-        storageBucket: "jarvis-77f82.appspot.com",
-        messagingSenderId: "172501072688",
-        appId: "1:172501072688:web:17b57e04673ab8351ba6f5",
-        measurementId: "G-WJ48JZCEDP"
+
     }
 
     firebase.initializeApp(config)
@@ -50,6 +45,26 @@ function registerClientToken() {
 
     messaging.requestPermission()
         .then(() => messaging.getToken())
-        .then(token => $.post("http://localhost:8080/kk/token", token, msg => console.log(msg)))
+        .then(token =>
+            // $.post("http://localhost:8080/kk/token", decodeURIComponent(token), msg => console.log(msg))
+            $.ajax({contentType: "application/json", url:"http://localhost:8080/kk/token", type:'post', data:decodeURIComponent(token), success:msg=>console.log(msg)})
+        )
         .catch(err => console.log("Error Occured" + err))
+}
+
+function naverLogin() {
+    let naverLogin = new naver.LoginWithNaverId(
+        {
+            clientId: "Up1NzGvqP7IQqVSndn2l",
+            callbackUrl: "http://localhost:8080/kk/naverLogin",
+            isPopup: false,
+            loginButton: {color: "white", type: 1, height: 30}
+        }
+    )
+    naverLogin.init()
+}
+
+function googleLogin() {
+    window.open('http://localhost:8080/oauth2/authorization/google', '_black', 'width=600, height=400')
+    return false
 }
