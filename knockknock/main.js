@@ -1,10 +1,14 @@
+var $modal=$('.modal')
+
 $(document).ready(function () {
     navigator.serviceWorker.register('firebase-messaging-sw.js')
-    registerClientToken()
-    naverLogin()
-    $('#googleLogin').on('click',googleLogin)
-    $.getJSON("http://localhost:8080/kk/list", "", list => Array.from(list).forEach(item => item.no % 2 == 0 ? appendRightContent(item) : appendLeftContent(item)))
-    textFit(document.getElementsByClassName('productTitle'), {multiLine: true})
+    $('#googleLogin').on('click', event => socialLogin(social.google))
+    try {
+        registerClientToken()
+        getRestAPI("http://localhost:8080/kk/list", "", list => Array.from(list).forEach(item => item.no % 2 == 0 ? appendRightContent(item) : appendLeftContent(item)))
+    } catch (e) {
+        console.log(e)
+    }
 })
 
 function comma(str) {
@@ -13,13 +17,14 @@ function comma(str) {
 }
 
 function content(data) {
-    let fee = data.fee === 0 ? '무료' : data.fee
+    let product = data.product
+    let fee = product.fee === 0 ? '무료' : product.fee
     let tag = "<div class='container'>\n" +
         "            <div style='display: flex'>" +
-        "                <img class='productImg' src='" + data.image + "'>" +
+        "                <img class='productImg' src='" + product.img + "'>" +
         "                <div style='width: 100px'>" +
-        "                    <a target='_blank' href='" + data.link + "'><span class='productTitle'>" + data.title + "</span></a>" +
-        "                    <span class='productPrice'>" + comma(data.price) + "/" + fee + "</span>" +
+        "                    <a target='_blank' href='" + product.link + "'><span class='productTitle'>" + product.title + "</span></a>" +
+        "                    <span class='productPrice'>" + comma(product.price) + "/" + fee + "</span>" +
         "                </div>" +
         "            </div>" +
         "        </div>"
@@ -36,7 +41,7 @@ function appendRightContent(data) {
 
 function registerClientToken() {
     let config = {
-
+       
     }
 
     firebase.initializeApp(config)
@@ -46,25 +51,41 @@ function registerClientToken() {
     messaging.requestPermission()
         .then(() => messaging.getToken())
         .then(token =>
-            // $.post("http://localhost:8080/kk/token", decodeURIComponent(token), msg => console.log(msg))
-            $.ajax({contentType: "application/json", url:"http://localhost:8080/kk/token", type:'post', data:decodeURIComponent(token), success:msg=>console.log(msg)})
+            postRestAPI("http://localhost:8080/kk/token", decodeURIComponent(token), msg=>console.log(msg))
         )
         .catch(err => console.log("Error Occured" + err))
 }
 
-function naverLogin() {
-    let naverLogin = new naver.LoginWithNaverId(
-        {
-            clientId: "Up1NzGvqP7IQqVSndn2l",
-            callbackUrl: "http://localhost:8080/kk/naverLogin",
-            isPopup: false,
-            loginButton: {color: "white", type: 1, height: 30}
-        }
-    )
-    naverLogin.init()
+var social = {google:'http://localhost:8080/oauth2/authorization/google', naver:'naver', kakao:'kakao'}
+
+function socialLogin(url) {
+    // $("#login").attr('src', url)
+    // getRestAPI(url, '', html => console.log(html))
+    window.open(url, '_black', 'width=600, height=400')
 }
 
-function googleLogin() {
-    window.open('http://localhost:8080/oauth2/authorization/google', '_black', 'width=600, height=400')
-    return false
+function getRestAPI(url, data, success) {
+    executeAjax(url, 'get', data, success)
+}
+
+function postRestAPI(url, data, success) {
+    executeAjax(url, 'post', data, success)
+}
+
+function putRestAPI(url, data, success) {
+    executeAjax(url, 'post', data, success)
+}
+
+function executeAjax(url, type, data, success) {
+    $.ajax({
+        url: url,
+        type: type,
+        data: data,
+        contentType: "application/json"
+    }).done(response => success(response)).fail(error => error.responseJSON.status === 401 ? loginModal() : console.log('에러'))
+}
+
+function loginModal() {
+    $modal.css('display', 'block')
+    throw new Error('권한이 없습니다.')
 }

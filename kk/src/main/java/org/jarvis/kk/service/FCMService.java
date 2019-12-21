@@ -54,12 +54,22 @@ public final class FCMService {
         Notification notification = Notification.builder().setTitle("Knock Knock").setBody("특가 정보가 도착했습니다!")
                 .setImage("chrome-extension://gojmfdiadefnfndenopbbjcioiigfkbi/msgImg.png").build();
 
-        Message message = Message.builder().putData("score", "850").putData("time", "2:45")
+        Message message = Message.builder()
                 .setWebpushConfig(WebpushConfig.builder()
                         .setFcmOptions(
                                 WebpushFcmOptions.withLink("chrome-extension://gojmfdiadefnfndenopbbjcioiigfkbi/"))
                         .build())
                 .setNotification(notification).setTopic("All").build();
+        try {
+            FirebaseMessaging.getInstance(firebaseApp).send(message);
+        } catch (FirebaseMessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void pushOneFcm(){
+        Message message = Message.builder().putData("msg", "SUCCESS")
+                .setToken("dlDWt2cGiRYbaiHXiNRLfm:APA91bGSfmtwl3r4wucQ_zH5RJ0dgNa2MvRGEt8PB8LqE2VT9IYWVI0P8A_OoKmg06TdgSuMv40px-v2UOM-00WP2CMar_qp7-JDqyw9K7NrOeHMW3iilQL5yQHT3yg-Ply5B0akgo_w").build();
         try {
             FirebaseMessaging.getInstance(firebaseApp).send(message);
         } catch (FirebaseMessagingException e) {

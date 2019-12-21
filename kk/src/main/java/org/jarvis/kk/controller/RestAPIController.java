@@ -1,8 +1,12 @@
 package org.jarvis.kk.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.jarvis.kk.domain.CommunityCrawling;
 import org.jarvis.kk.repositories.CommunityCrawlingRepository;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.view.RedirectView;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,23 +60,11 @@ public class RestAPIController {
         fcmService.pushAllFcm();
     }
 
-    @GetMapping("/naverLogin")
-    public void naverLoginCallback() throws UnsupportedEncodingException {
-        log.info("=============================================");
-        String clientId =
-        String clientSecret = 
-        String redirectURI = URLEncoder.encode("YOUR_CALLBACK_URL", "UTF-8");
-        String apiURL;
-        apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
-        apiURL += "client_id=" + clientId;
-        apiURL += "&client_secret=" + clientSecret;
-        apiURL += "&redirect_uri=" + redirectURI;
-        RestTemplate template = new RestTemplate();
-        String response = template.getForObject(apiURL, String.class);
-        log.info("================="+response);
-        int responseCode = 200;
-        if (responseCode == 200) { // 정상 호출
-        } else { // 에러 발생
-        }
+    @GetMapping("/loginSuccess")
+    public void loginSuccess(HttpServletResponse response) throws IOException{
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out =  response.getWriter();
+        out.println("<script>window.close()</script>");
+        out.flush();
     }
 }

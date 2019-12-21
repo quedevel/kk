@@ -46,8 +46,8 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(member.getRole().getKey())), attributes.getAttributes(), attributes.getNameAttributeKey());
     }
 
-    private Member saveOrUpdate(final OAuth2Attributes attributes) {
-        final Member member = memberRepository.findByMid(attributes.getEmail()).map(entity->entity.update("남자", "10대")).orElse(attributes.toEntity());
+    private Member saveOrUpdate(OAuth2Attributes attributes) {
+        Member member = memberRepository.findByMid(attributes.getEmail()).map(entity->entity.update("남자", "10대")).orElse(attributes.toEntity());
         return memberRepository.save(member);
     }
 }
