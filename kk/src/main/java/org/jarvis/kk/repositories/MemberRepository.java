@@ -1,7 +1,5 @@
 package org.jarvis.kk.repositories;
 
-import java.util.Optional;
-
 import org.jarvis.kk.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,5 +8,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MemberRepository extends JpaRepository<Member, String> {
 
-    Optional<Member> findByMid(String mid);
 }

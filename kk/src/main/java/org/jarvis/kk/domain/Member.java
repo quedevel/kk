@@ -1,5 +1,7 @@
 package org.jarvis.kk.domain;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CollectionTable;
@@ -13,13 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
-
 import org.jarvis.kk.dto.BaseTimeEntity;
 import org.jarvis.kk.dto.Role;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -48,7 +49,7 @@ public class Member extends BaseTimeEntity {
     @CollectionTable(name = "tbl_Token", joinColumns = @JoinColumn(name="mid"))
     private List<Token> tokens;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "tbl_Interest", joinColumns = @JoinColumn(name="mid"))
     private List<Interest> interests;
 
@@ -60,6 +61,20 @@ public class Member extends BaseTimeEntity {
         this.sex = sex;
         this.ageGroup = ageGroup;
 
+        return this;
+    }
+
+    public Member setInterestList(String[] interests) {
+        List<Interest> list = new ArrayList<>();
+        Arrays.stream(interests).forEach(interest->list.add(new Interest(interest)));
+        this.interests = list;
+        return this;
+    }
+
+    public Member setToeknList(String... tokens){
+        List<Token> list = new ArrayList<>();
+        Arrays.stream(tokens).forEach(token->list.add(new Token(token)));
+        this.tokens = list;
         return this;
     }
 }

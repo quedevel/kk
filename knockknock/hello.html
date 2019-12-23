@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <link>
-    <meta charset="UTF-8">
-    <title>KK</title>
-    <link rel="stylesheet" href="css/custom.css" type="text/css">
+<meta charset="UTF-8">
+<title>KK</title>
+<link rel="stylesheet" href="css/custom.css" type="text/css">
 </head>
 <body>
 <div class="titleDiv content">
     <h1 class="title">Knock Knock</h1>
     <h3 class="date">2019.12.13 PM 3시 특가!</h3>
 </div>
-<div id="naverIdLogin"></div>
 
+<span class="date" id="setInterestBtn">관심사</span>
 <a href="http://localhost:8080/logout">logout</a>
+
 <div class="content">
     <div class="leftContent" style="float: left;"></div>
     <div class="rightContent" style="float: right;"></div>
 </div>
 
 
-
-<div class="modal">
+<div class="modal" id="login">
     <div class="modal-content content">
-        <img src="mark.png" style="width: 50%">
-        <p id="googleLogin">Google</p>
-        <p id="naverLogin">Naver</p>
-        <p id="kakaoLogin">Kakao</p>
+        <img src="img/mark.png" style="width: 80%; margin-bottom: 20px">
+        <img src="img/naver.PNG" data-site="naver" class="socialLogin">
+        <img src="img/kakao.png" data-site="kakao" class="socialLogin">
+        <img src="img/goole.png" data-site="google" class="socialLogin">
+        <img src="img/facebook.png" data-site="facebook" class="socialLogin">
     </div>
 </div>
 
+<div class="modal" id="interest">
+    <div class="modal-content content">
+        <input name="category" type="checkbox" value="C1"> 육아
+        <input name="category" type="checkbox" value="C2"> 가전/가구
+        <input name="category" type="checkbox" value="C3"> 디지털
+        <input name="category" type="checkbox" value="C4"> 식품/건강
+        <input name="category" type="checkbox" value="C5"> 컴퓨터
+        <input name="category" type="checkbox" value="C6"> 의류/잡화
+        <input name="category" type="checkbox" value="C7"> 기타
+        <span id="saveInterestBtn">저장</span>
+    </div>
+</div>
 
+<script id="template" type="x-tmpl-mustache">
+<div class="container">
+    <div style="display: flex">
+        <img class="productImg" src="{{img}}">
+        <div style="width: 100px">
+            <a target="_blank" href="{{link}}" data-no="{{no}}" class="productTitle">{{title}}</a>
+            <span class="productPrice">{{price}} / {{fee}}</span>
+        </div>
+    </div>
+</div>
+</script>
 
-<script src="js/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.5.2/firebase.js"></script>
-<script src="main.js"></script>
+<script src="js/mustach.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>

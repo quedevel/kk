@@ -31,7 +31,7 @@ public final class FCMService {
             FileInputStream serviceAccount = new FileInputStream("C:/Users/SH/FireBaseDB/serviceAccountKey.json");
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("").build();
+                    .setDatabaseUrl("https://jarvis-77f82.firebaseio.com").build();
             FirebaseApp.initializeApp(options, "options");
         } catch (Exception e) {
             //spring boot 재시작 시 bean이 생성된 상태에서 또다시 호출되는 듯
@@ -67,9 +67,9 @@ public final class FCMService {
         }
     }
 
-    public void pushOneFcm(){
+    public void pushOneFcm(String token){
         Message message = Message.builder().putData("msg", "SUCCESS")
-                .setToken("dlDWt2cGiRYbaiHXiNRLfm:APA91bGSfmtwl3r4wucQ_zH5RJ0dgNa2MvRGEt8PB8LqE2VT9IYWVI0P8A_OoKmg06TdgSuMv40px-v2UOM-00WP2CMar_qp7-JDqyw9K7NrOeHMW3iilQL5yQHT3yg-Ply5B0akgo_w").build();
+                .setToken(token).build();
         try {
             FirebaseMessaging.getInstance(firebaseApp).send(message);
         } catch (FirebaseMessagingException e) {

@@ -9,16 +9,23 @@ from bs4 import BeautifulSoup
 
 
 def lambda_handler(event, context):
-    conn = pymysql.connect()
+    conn = pymysql.connect(host='127.0.0.1', port=3306, user='bit04',
+                           passwd='1234', db='jarvis')
     curs = conn.cursor()
 
     selectLastData = 'select title from tbl_community_crawling where no >= (select no from tbl_community_crawling where last_crawling = 1 order by no desc limit 1) limit 3'
+
+    selectCategory = 'select * from tbl_category'
 
     addSpecialPrice = 'insert into tbl_community_crawling (category, title, price, fee, img, link, last_crawling) values(%s, %s, %s, %s, %s, %s, %s)'
 
     curs.execute(selectLastData)
 
     lastData = tuple(map(lambda row: row[0], curs.fetchall()))
+
+    curs.execute(selectCategory)
+
+    categoryMap = curs.fetchall()
 
     parentheses = re.compile('\(.+?\)')
     squareBrackets = re.compile('\[.+?\]')
@@ -38,62 +45,74 @@ def lambda_handler(event, context):
 
     for item in items:
         titleTag = item.select_one('.list_title')
-        if titleTag:
-            titleText = titleTag.text
-            title = parentheses.sub('', squareBrackets.sub('', titleText)).strip()
 
-            priceTag = squareBrackets.findall(titleText) + parentheses.findall(titleText)
+        if not titleTag:
+            continue
 
-            category = item.select_one('nobr.list_vspace').text
-            link = None
-            price = 0
-            fee = 0
+        titleText = titleTag.text
 
-            if priceTag:
-                priceArr = list(map(lambda i: 0 if i == '' else int(i), sum(map(lambda num: priceSplit.split(priceParsing.sub('', num).strip()), priceTag), [])))
+        title = parentheses.sub('', squareBrackets.sub('', titleText)).strip()
 
-                if len(priceArr) > 1:
-                    if 5000 >= priceArr[-1] >= 2000:
-                        fee = priceArr.pop()
-                    price = max(priceArr)
-                else:
-                    price = priceArr[0]
+        if title == '':
+            continue
 
-            if price >= 100:
-                naverItem = NaverAPI.findNaverAPI(title, price)
+        priceTag = squareBrackets.findall(titleText) + parentheses.findall(titleText)
 
-                if not ("image" in naverItem):
-                    image = 'http:' + item.select_one('.thumb_border').get('src')
+        category = item.select_one('nobr.list_vspace').text
 
-                else:
-                    image = naverItem['image']
+        for categoryName in categoryMap:
+            if category in categoryName:
+                category = categoryName[0]
+                break
 
-                    if int(naverItem['lprice']) < price:
-                        # 배송비 추가 필요
-                        title = squareBrackets.sub('', naverItem['title'])
-                        price = naverItem['lprice']
-                        link = naverItem['link']
+        link = None
+        price = 0
+        fee = 0
 
-                if title in lastData:
-                    break
+        if priceTag:
+            priceArr = list(map(lambda i: 0 if i == '' else int(i), sum(map(lambda num: priceSplit.split(priceParsing.sub('', num).strip()), priceTag), [])))
 
-                if link is None:
-                    boardLink = 'http://www.ppomppu.co.kr/zboard/' + item.select('a')[1].get('href')
-                    link = CrawlingUtil.crawl(boardLink).select_one('.wordfix a').get('href')
+            if len(priceArr) > 1:
+                if 5000 >= priceArr[-1] >= 2000:
+                    fee = priceArr.pop()
+                price = max(priceArr)
+            else:
+                price = priceArr[0]
 
-                curs.execute(addSpecialPrice, (category, title, price, fee, image, link, last_crawling))
+        if 10000000>= price >= 100:
+            naverItem = NaverAPI.findNaverAPI(title, price)
 
-                last_crawling = False
+            if not ("image" in naverItem):
+                image = 'http:' + item.select_one('.thumb_border').get('src')
+
+            else:
+                image = naverItem['image']
+
+                if int(naverItem['lprice']) < price:
+                    # 배송비 추가 필요
+                    title = squareBrackets.sub('', naverItem['title'])
+                    price = naverItem['lprice']
+                    link = naverItem['link']
+
+            if title in lastData:
+                break
+
+            if link is None:
+                boardLink = 'http://www.ppomppu.co.kr/zboard/' + item.select('a')[1].get('href')
+                link = CrawlingUtil.crawl(boardLink).select_one('.wordfix a').get('href')
+
+            curs.execute(addSpecialPrice, (category, title, price, fee, image, link, last_crawling))
+
+            last_crawling = False
 
     conn.commit()
 
     # requests.get("http://192.168u.0.25:8080/kk/msg")
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps('Community Crawling SUCCESS')
-    }
-
+    # return {
+    #     'statusCode': 200,
+    #     'body': json.dumps('Community Crawling SUCCESS')
+    # }
 
 class CrawlingUtil:
     def crawl(url):

@@ -10,12 +10,15 @@ import javax.persistence.Table;
 
 import org.jarvis.kk.dto.BaseTimeEntity;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * ClickHistory
  */
 @Getter
+@NoArgsConstructor
 @Entity
 @Table(name = "tbl_ClickHistory")
 public class ClickHistory extends BaseTimeEntity {
@@ -29,4 +32,10 @@ public class ClickHistory extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private CommunityCrawling communityCrawling;
+
+    @Builder
+    public ClickHistory(Member member, CommunityCrawling communityCrawling) {
+        this.member = member;
+        this.communityCrawling = communityCrawling;
+    }
 }

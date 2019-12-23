@@ -47,7 +47,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
     }
 
     private Member saveOrUpdate(OAuth2Attributes attributes) {
-        Member member = memberRepository.findByMid(attributes.getEmail()).map(entity->entity.update("남자", "10대")).orElse(attributes.toEntity());
+        Member member = memberRepository.findById(attributes.getMid()).map(entity->entity.update(attributes.getSex(), attributes.getAgeGroup())).orElse(attributes.toEntity());
         return memberRepository.save(member);
     }
 }

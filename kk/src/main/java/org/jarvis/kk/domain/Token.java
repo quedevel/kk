@@ -3,7 +3,6 @@ package org.jarvis.kk.domain;
 import javax.persistence.Embeddable;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Embeddable
 public class Token {
 
