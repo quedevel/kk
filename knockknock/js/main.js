@@ -18,14 +18,7 @@ const HttpStatus = Object.freeze({
 
 const messaging = (function () {
     const config = Object.freeze({
-        apiKey: "AIzaSyCGaGI3cbJPPj2bsqFk4gWgpbwh9Br0aWA",
-        authDomain: "jarvis-5203e.firebaseapp.com",
-        databaseURL: "https://jarvis-5203e.firebaseio.com",
-        projectId: "jarvis-5203e",
-        storageBucket: "jarvis-5203e.appspot.com",
-        messagingSenderId: "164187530364",
-        appId: "1:164187530364:web:9d7d6cdfba5029aa6a55f9",
-        measurementId: "G-GNYNL1ZDKQ"  
+
     })
 
     firebase.initializeApp(config)
