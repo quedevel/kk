@@ -18,7 +18,14 @@ const HttpStatus = Object.freeze({
 
 const messaging = (function () {
     const config = Object.freeze({
-  
+        apiKey: "AIzaSyCGaGI3cbJPPj2bsqFk4gWgpbwh9Br0aWA",
+        authDomain: "jarvis-5203e.firebaseapp.com",
+        databaseURL: "https://jarvis-5203e.firebaseio.com",
+        projectId: "jarvis-5203e",
+        storageBucket: "jarvis-5203e.appspot.com",
+        messagingSenderId: "164187530364",
+        appId: "1:164187530364:web:9d7d6cdfba5029aa6a55f9",
+        measurementId: "G-GNYNL1ZDKQ"  
     })
 
     firebase.initializeApp(config)
@@ -32,23 +39,23 @@ var prevAjax = null
 
 $(document).ready(function () {
 
-    $(".socialLogin").on('click', function (event) {
-        socialLogin(Social[this.getAttribute('data-site')])
-    })
+    // $(".socialLogin").on('click', function (event) {
+    //     socialLogin(Social[this.getAttribute('data-site')])
+    // })
 
-    $(".content").on('click', '.productTitle', function (event) {
-        event.preventDefault()
-        new AjaxBuilder().method(Method.GET).url("click").data({no: this.getAttribute("data-no")}).build()
-    })
+    // $(".content").on('click', '.productTitle', function (event) {
+    //     event.preventDefault()
+    //     new AjaxBuilder().method(Method.GET).url("click").data({no: this.getAttribute("data-no")}).build()
+    // })
 
-    $("#setInterestBtn").on('click', event => $interest.css('display', 'block'))
+    // $("#setInterestBtn").on('click', event => $interest.css('display', 'block'))
 
 
-    $("#saveInterestBtn").on('click', event => {
-        let interests = new Array();
-        $("input:checkbox[name=category]:checked").each( (index, item) => interests.push(item.value) )
-        new AjaxBuilder().method(Method.PUT).url("updateInterest").data(JSON.stringify(interests)).success(status=>$interest.css('display', 'none')).build()
-    })
+    // $("#saveInterestBtn").on('click', event => {
+    //     let interests = new Array();
+    //     $("input:checkbox[name=category]:checked").each( (index, item) => interests.push(item.value) )
+    //     new AjaxBuilder().method(Method.PUT).url("updateInterest").data(JSON.stringify(interests)).success(status=>$interest.css('display', 'none')).build()
+    // })
 
     new AjaxBuilder().method(Method.GET).url("list").success(list => Array.from(list).forEach(item => item.no % 2 == 0 ? appendRightContent(item) : appendLeftContent(item))).build()
 })
@@ -89,21 +96,21 @@ function registerClientToken() {
         .catch(err => console.log("Error Occured" + err))
 }
 
-function socialLogin(url) {
-    const loginPopup = window.open(url, '_black', 'width=auto, height=auto')
+// function socialLogin(url) {
+//     const loginPopup = window.open(url, '_black', 'width=auto, height=auto')
 
-    let interval = window.setInterval(() => {
-        if (loginPopup.closed) {
-            registerClientToken()
-            window.clearInterval(interval)
-            //301일시 이동
-            new AjaxBuilder().method(Method.GET).url("interestChecking")
-                .success(status => status === HttpStatus.MOVED_PERMANENTLY ? $interest.css('display', 'block') : executeAjax(prevAjax)).build()
+//     let interval = window.setInterval(() => {
+//         if (loginPopup.closed) {
+//             registerClientToken()
+//             window.clearInterval(interval)
+//             //301일시 이동
+//             new AjaxBuilder().method(Method.GET).url("interestChecking")
+//                 .success(status => status === HttpStatus.MOVED_PERMANENTLY ? $interest.css('display', 'block') : executeAjax(prevAjax)).build()
 
-            $login.css('display', 'none')
-        }
-    }, 1000);
-}
+//             $login.css('display', 'none')
+//         }
+//     }, 1000);
+// }
 
 function executeAjax(ajax) {
     $.ajax({

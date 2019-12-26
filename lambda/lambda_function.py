@@ -8,7 +8,7 @@ import json
 from bs4 import BeautifulSoup
 
 
-def lambda_handler(event, context):
+def lambda_handler():
     conn = pymysql.connect(host='127.0.0.1', port=3306, user='bit04',
                            passwd='1234', db='jarvis')
     curs = conn.cursor()
